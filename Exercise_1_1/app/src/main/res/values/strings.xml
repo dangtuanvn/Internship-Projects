@@ -1,0 +1,8 @@
+<resources>name
+    <string name="app_name">Exercise 1</string>
+    <string name="step_1">Step 1</string>
+    <string name="step_2">Step 2</string>
+    <string name="step_3">Step 3</string>
+    <string name="lowerBound">$0</string>
+    <string name="upperBound">$10000</string>
+</resources>

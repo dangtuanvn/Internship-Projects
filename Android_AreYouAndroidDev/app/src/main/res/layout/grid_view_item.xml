@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_shape"
+    >
+
+    <TextView
+        android:id="@+id/gAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Author"
+        android:layout_marginLeft="5dp"
+        android:layout_alignParentLeft="true"
+        android:textColor="#0A295A"/>
+
+    <TextView
+        android:id="@+id/gScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"
+        android:textColor="#a9a9a9" />
+
+    <TextView
+        android:id="@+id/gTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="Title................................."
+        android:layout_below="@+id/gAuthor"
+        android:textColor="#000000"
+        android:minLines="3"
+        android:maxLines="3"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/gNum_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="# Comments"
+        android:layout_below="@+id/gTitle"
+        android:layout_marginLeft="5dp"
+        android:textColor="#a9a9a9" />
+
+    <TextView
+        android:id="@+id/gSubreddit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Subreddit"
+        android:layout_alignBottom="@+id/gNum_comments"
+        android:layout_toRightOf="@+id/gNum_comments"
+        android:textColor="#a9a9a9" />
+</RelativeLayout>
