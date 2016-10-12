@@ -25,7 +25,6 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.mContext = context;
     }
 
-
     private Context getContext() {
         return mContext;
     }

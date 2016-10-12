@@ -1,5 +1,7 @@
 package com.example.dangtuanvn.exercise_1_1;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -133,13 +135,26 @@ public class SignUpStep1Fragment extends Fragment {
             return false;
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            fragmentOneListener = (SignUpStep1FragmentListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement SignUpStep1FragmentListener");
+        }
+
+    }
+
+    @TargetApi(23)
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
             fragmentOneListener = (SignUpStep1FragmentListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()+ " must implement SignUpStep1FragmentListener");
+            throw new ClassCastException(context.toString() + " must implement SignUpStep1FragmentListener");
         }
     }
 
