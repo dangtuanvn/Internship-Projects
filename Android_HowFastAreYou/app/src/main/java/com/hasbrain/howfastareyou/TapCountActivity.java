@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,6 +66,8 @@ public class TapCountActivity extends AppCompatActivity implements TapCountResul
                 if (SystemClock.elapsedRealtime() - startTime >= TIME_COUNT) {
                     pauseTapping();
                 }
+                Log.i("timer", tvTime.getId() + " : " + tvTime.getText());
+                Log.i("startTime", "Start Time: " + startTime);
             }
         });
     }
