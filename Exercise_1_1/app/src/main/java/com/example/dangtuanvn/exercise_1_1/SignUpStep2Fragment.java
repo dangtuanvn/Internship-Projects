@@ -127,7 +127,7 @@ public class SignUpStep2Fragment extends Fragment {
     }
 
     /*
- * Deprecated on API 23
+ * Deprecated on API 24
  * Use onAttachToContext instead
  */
     @SuppressWarnings("deprecation")

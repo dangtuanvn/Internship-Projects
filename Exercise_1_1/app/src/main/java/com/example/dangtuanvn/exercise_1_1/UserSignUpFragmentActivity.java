@@ -21,9 +21,7 @@ public class UserSignUpFragmentActivity extends AppCompatActivity implements Sig
         setContentView(R.layout.activity_sign_up);
 
         SignUpStep1Fragment fragmentOne = new SignUpStep1Fragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(R.id.signup_fragment, fragmentOne);
-        transaction.commit();
+        getFragmentManager().beginTransaction().add(R.id.signup_fragment, fragmentOne).commit();
     }
 
     @Override
@@ -31,12 +29,7 @@ public class UserSignUpFragmentActivity extends AppCompatActivity implements Sig
         fragmentOne = (SignUpStep1Fragment) getFragmentManager().findFragmentById(R.id.signup_fragment);
 
         SignUpStep2Fragment fragmentTwo = new SignUpStep2Fragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.signup_fragment, fragmentTwo);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        getFragmentManager().beginTransaction().add(R.id.signup_fragment, fragmentTwo).commit();
 
         fragmentTwo.saveData(data);
     }
@@ -44,12 +37,7 @@ public class UserSignUpFragmentActivity extends AppCompatActivity implements Sig
     @Override
     public void sendDataStep2(SignUpData data) {
         SignUpStep3Fragment fragmentThree = new SignUpStep3Fragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        transaction.replace(R.id.signup_fragment, fragmentThree);
-        transaction.addToBackStack(null);
-
-        transaction.commit();
+        getFragmentManager().beginTransaction().add(R.id.signup_fragment, fragmentThree).commit();
 
         fragmentThree.saveData(data);
     }

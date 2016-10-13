@@ -147,7 +147,7 @@ public class SignUpStep1Fragment extends Fragment {
 
     }
 
-    @TargetApi(23)
+    @TargetApi(24)
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
