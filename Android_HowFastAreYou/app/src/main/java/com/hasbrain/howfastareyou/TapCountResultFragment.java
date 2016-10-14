@@ -22,29 +22,23 @@ public class TapCountResultFragment extends Fragment {
     ArrayList<Integer> listScore;
     public static ResultAdapter adapter;
     RecyclerView recycleListView;
-    private long current_timeAtPause;
-    private int current_score;
-    private boolean current_start;
-    DataPass dataPasser;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_results, container, false);
 
         if (savedInstanceState != null) {
             // Restore last state
             listTime = savedInstanceState.getStringArrayList("list_time");
             listScore = savedInstanceState.getIntegerArrayList("list_score");
-            dataPasser.passDataToActivity(savedInstanceState.getBoolean("current_start"),
-                    savedInstanceState.getInt("current_score"), savedInstanceState.getLong("current_time"));
-//            current_timeAtPause = savedInstanceState.getLong("current_time");
-//            current_score = savedInstanceState.getInt("current_score");
-//            current_start = savedInstanceState.getBoolean("current_start");
         } else{
             listTime = new ArrayList<>();
             listScore = new ArrayList<>();
+
+//            for(int i = 0; i < 1000000000; i ++){
+//                listTime.add("4/10/2015 01:17:38");
+//                listScore.add(i);
+//            }
         }
 
         recycleListView = (RecyclerView) view.findViewById(R.id.recyclerview);
@@ -75,25 +69,5 @@ public class TapCountResultFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putStringArrayList("list_time", listTime);
         outState.putIntegerArrayList("list_score", listScore);
-        outState.putLong("current_time", ((TapCountActivity) this.getActivity()).getTimeAtPause());
-        outState.putBoolean("current_start", ((TapCountActivity) this.getActivity()).isStart());
-        outState.putInt("current_score", ((TapCountActivity) this.getActivity()).getTap_count());
-    }
-
-    @Deprecated
-    @Override
-    public void onAttach(Activity a) {
-        super.onAttach(a);
-        dataPasser = (DataPass) a;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        dataPasser = (DataPass) context;
-    }
-
-    public interface DataPass {
-        public void passDataToActivity(Boolean current_start, int current_score, long current_time);
     }
 }

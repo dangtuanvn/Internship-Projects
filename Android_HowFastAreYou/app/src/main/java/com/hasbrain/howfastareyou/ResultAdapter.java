@@ -17,10 +17,8 @@ import java.util.List;
 public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultViewHolder> {
     private ArrayList<String> listTime;
     private ArrayList<Integer> listScore;
-    private Context context;
 
     public ResultAdapter(Context context, ArrayList<String> listTime, ArrayList<Integer> listScore) {
-        this.context = context;
         this.listTime = listTime;
         this.listScore = listScore;
     }

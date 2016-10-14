@@ -1,8 +1,10 @@
 package com.hasbrain.howfastareyou;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -13,20 +15,17 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class TapCountActivity extends AppCompatActivity implements TapCountResultFragment.DataPass {
+public class TapCountActivity extends AppCompatActivity {
 
-    public static final int TIME_COUNT = 10000; //10s
+    public static int TIME_COUNT = 10000; //10s
     @Bind(R.id.bt_tap)
     Button btTap;
     @Bind(R.id.bt_start)
@@ -37,28 +36,37 @@ public class TapCountActivity extends AppCompatActivity implements TapCountResul
     TextView count;
     private int tap_count = 0;
     private long startTime;
-    private boolean start;
+    private boolean start = false;
     private long timeAtPause = 0;
-
-    //    private ArrayList<String> listTime;
-//    private ArrayList<Integer> listScore;
     TapCountResultFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count);
+        // PreferenceManager.setDefaultValues(this, R.xml.preference, false);
+
         ButterKnife.bind(this);
 
-        if (savedInstanceState == null) {
-//        listTime = new ArrayList<>();
-//        listScore = new ArrayList<>();
+        if (savedInstanceState != null) {
+            fragment = (TapCountResultFragment) getFragmentManager().findFragmentByTag("fragment_result");
+            start = savedInstanceState.getBoolean("last_start");
+            tap_count = savedInstanceState.getInt("last_score");
+            timeAtPause = savedInstanceState.getLong("last_timeAtPause");
+
+            if(this.start){
+                btStart.setText("RESUME");
+            }
+            count.setText("" + tap_count);
+            long a = (SystemClock.elapsedRealtime() + timeAtPause);
+            tvTime.setBase(a);
+//        tvTime.setText("" + (SystemClock.elapsedRealtime() + timeAtPause));
+
+        }
+        else{
             fragment = new TapCountResultFragment();
             fragment.setArguments(new Bundle());
             getFragmentManager().beginTransaction().add(R.id.fl_result_fragment, fragment, "fragment_result").commit();
-        }
-        else{
-            fragment = (TapCountResultFragment) getFragmentManager().findFragmentByTag("fragment_result");
         }
         tvTime.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
@@ -66,10 +74,14 @@ public class TapCountActivity extends AppCompatActivity implements TapCountResul
                 if (SystemClock.elapsedRealtime() - startTime >= TIME_COUNT) {
                     pauseTapping();
                 }
-                Log.i("timer", tvTime.getId() + " : " + tvTime.getText());
-                Log.i("startTime", "Start Time: " + startTime);
+//                Log.i("timer", tvTime.getId() + " : " + tvTime.getText());
+//                Log.i("startTime", "Start Time: " + startTime);
             }
         });
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        TIME_COUNT = pref.getInt("time_limit", 10) * 1000;
+        System.out.println("TIME COUNT: " + TIME_COUNT);
     }
 
     @Override
@@ -125,31 +137,11 @@ public class TapCountActivity extends AppCompatActivity implements TapCountResul
         tvTime.stop();
         btTap.setEnabled(false);
         btStart.setEnabled(true);
-//        saveData();
         passDataToFragment();
         updateFragmentView();
     }
 
-//    private void saveData(){
-//        listScore.add(tap_count);
-//
-//        Date now = Calendar.getInstance().getTime();
-//        String now_str = DateFormat.format("dd/MM/yyyy HH:mm:ss", now).toString();
-//        listTime.add(now_str);
-//    }
-
     private void passDataToFragment(){
-
-//        Gson gson = new Gson();
-//        String stringTime = gson.toJson(listTime);
-//        String stringScore = gson.toJson(listScore);
-
-//        Bundle bundle = new Bundle();
-//        bundle.putStringArrayList("time", listTime);
-//        bundle.putIntegerArrayList("score", listScore);
-
-//        fragment.getArguments().putStringArrayList("time", listTime);
-//        fragment.getArguments().putIntegerArrayList("score", listScore);
         Date now = Calendar.getInstance().getTime();
         String now_str = DateFormat.format("dd/MM/yyyy HH:mm:ss", now).toString();
         fragment.getArguments().putString("time", now_str);
@@ -167,45 +159,25 @@ public class TapCountActivity extends AppCompatActivity implements TapCountResul
         if (start) {
             timeAtPause = tvTime.getBase() - SystemClock.elapsedRealtime();
             tvTime.stop();
-
             btTap.setEnabled(false);
             btStart.setEnabled(true);
             btStart.setText("RESUME");
         }
     }
 
-//    @Override
-//    public void finish() {
-//        super.finish();
-//        fragment.getArguments().putInt("current_score", tap_count);
-//        fragment.getArguments().putLong("current_time", timeAtPause);
-//        fragment.getArguments().putBoolean("current_start", start);
-//    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("last_start", start);
+        outState.putInt("last_score", tap_count);
+        outState.putLong("last_timeAtPause", timeAtPause);
+    }
 
     @Override
-    public void passDataToActivity(Boolean current_start, int current_score, long current_time) {
-        timeAtPause = current_time;
-        tap_count = current_score;
-        start = current_start;
-
-        if(this.start){
-            btStart.setText("RESUME");
-        }
-        count.setText("" + tap_count);
-        long a = (SystemClock.elapsedRealtime() + timeAtPause);
-//        tvTime.setBase(a);
-//        tvTime.setText("" + (SystemClock.elapsedRealtime() + timeAtPause));
-    }
-
-    public int getTap_count() {
-        return tap_count;
-    }
-
-    public long getTimeAtPause() {
-        return timeAtPause;
-    }
-
-    public boolean isStart() {
-        return start;
+    public void onResume(){
+        super.onResume();
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        TIME_COUNT = pref.getInt("time_limit", 10) * 1000;
+        System.out.println("TIME COUNT: " + TIME_COUNT);
     }
 }
