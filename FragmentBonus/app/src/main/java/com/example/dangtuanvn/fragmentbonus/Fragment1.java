@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,23 +30,21 @@ public class Fragment1 extends Fragment {
                 Fragment fragment = null;
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 if(view == view.findViewById(R.id.bt_2_f1)){
-                    fragment = fragmentManager.findFragmentByTag("fragment_2");
+                    fragment = ((MainActivity) getActivity()).getFragment2();
                     fragmentTransaction.replace(container.getId(), fragment, "fragment_2");
                     fragmentTransaction.addToBackStack("f1");
                     fragmentTransaction.commit();
                 }
                 else {
-                    if(fragmentManager.findFragmentByTag("fragment_3") == null){
-                        fragment = new Fragment3();
-                        fragmentTransaction.replace(container.getId(), fragment, "fragment_3");
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
-                    }
-                    else{
-                        fragment = fragmentManager.findFragmentByTag("fragment_3");
+                    fragment =  ((MainActivity) getActivity()).getFragment3();
                         fragmentTransaction.replace(container.getId(), fragment, "fragment_3");
                         fragmentTransaction.addToBackStack("f1");
                         fragmentTransaction.commit();
+                    for(int entry = 0; entry < fragmentManager.getBackStackEntryCount(); entry++){
+                        Log.i("BACKSTACK", "Found fragment: " + fragmentManager.getBackStackEntryAt(entry).getId());
+                    }
+                    if(   fragmentManager.getBackStackEntryCount() < 1){
+                        Log.i("BACKSTACK", "Found fragment: " + fragmentManager.getBackStackEntryCount() + " NONE");
                     }
                 }
 

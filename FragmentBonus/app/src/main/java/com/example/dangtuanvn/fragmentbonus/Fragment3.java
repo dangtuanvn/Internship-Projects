@@ -30,13 +30,13 @@ public class Fragment3 extends Fragment {
                 Fragment fragment = null;
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 if(view == view.findViewById(R.id.bt_1_f3)){
-                    fragment = fragmentManager.findFragmentByTag("fragment_1");
+                    fragment = ((MainActivity) getActivity()).getFragment1();
                     fragmentTransaction.replace(container.getId(), fragment, "fragment_1");
                     fragmentTransaction.addToBackStack("f3");
                     fragmentTransaction.commit();
                 }
                 else {
-                    fragment = fragmentManager.findFragmentByTag("fragment_2");
+                    fragment = ((MainActivity) getActivity()).getFragment2();
                     fragmentTransaction.replace(container.getId(), fragment, "fragment_2");
                     fragmentTransaction.addToBackStack("f3");
                     fragmentTransaction.commit();

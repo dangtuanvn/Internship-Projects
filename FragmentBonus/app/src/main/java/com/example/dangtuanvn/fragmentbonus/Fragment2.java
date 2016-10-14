@@ -32,24 +32,18 @@ public class Fragment2 extends Fragment {
                 Fragment fragment = null;
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 if(view == view.findViewById(R.id.bt_1_f2)){
-                    fragment = fragmentManager.findFragmentByTag("fragment_1");
+                    fragment =   ((MainActivity) getActivity()).getFragment1();
                     fragmentTransaction.replace(container.getId(), fragment, "fragment_1");
                     fragmentTransaction.addToBackStack("f2");
                     fragmentTransaction.commit();
                 }
                 else {
-                    if(fragmentManager.findFragmentByTag("fragment_3") == null){
-                        fragment = new Fragment3();
-                        fragmentTransaction.replace(container.getId(), fragment, "fragment_3");
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
-                    }
-                    else{
-                        fragment = fragmentManager.findFragmentByTag("fragment_3");
+
+                    fragment =   ((MainActivity) getActivity()).getFragment3();
                         fragmentTransaction.replace(container.getId(), fragment, "fragment_3");
                         fragmentTransaction.addToBackStack("f2");
                         fragmentTransaction.commit();
-                    }
+
                 }
 
             }

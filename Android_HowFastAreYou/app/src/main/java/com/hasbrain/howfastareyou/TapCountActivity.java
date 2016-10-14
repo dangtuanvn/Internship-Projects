@@ -37,6 +37,7 @@ public class TapCountActivity extends AppCompatActivity {
     private int tap_count = 0;
     private long startTime;
     private boolean start = false;
+    private boolean change = false;
     private long timeAtPause = 0;
     TapCountResultFragment fragment;
 
@@ -79,9 +80,6 @@ public class TapCountActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        TIME_COUNT = pref.getInt("time_limit", 10) * 1000;
-        System.out.println("TIME COUNT: " + TIME_COUNT);
     }
 
     @Override
@@ -113,6 +111,7 @@ public class TapCountActivity extends AppCompatActivity {
     private void startTapping() {
         if(!start){
             start = true;
+            change = false;
             tap_count = 0;
             timeAtPause = 0;
             startTime = SystemClock.elapsedRealtime();
@@ -122,6 +121,7 @@ public class TapCountActivity extends AppCompatActivity {
             btStart.setEnabled(false);
         }
         else {
+            change = false;
             btStart.setText("START");
             startTime = SystemClock.elapsedRealtime() + timeAtPause;
             tvTime.setBase(SystemClock.elapsedRealtime() + timeAtPause);
@@ -133,6 +133,7 @@ public class TapCountActivity extends AppCompatActivity {
 
     private void pauseTapping() {
         start = false;
+        change = false;
         btTap.setEnabled(false);
         tvTime.stop();
         btTap.setEnabled(false);
@@ -156,7 +157,8 @@ public class TapCountActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        if (start) {
+        if (start && !change) {
+            change = true;
             timeAtPause = tvTime.getBase() - SystemClock.elapsedRealtime();
             tvTime.stop();
             btTap.setEnabled(false);

@@ -17,4 +17,19 @@ public class MainActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction().add(R.id.space_2, fragment2, "fragment_2").commit();
     }
 
+    public Fragment getFragment1() {
+        fragment1 = new Fragment1();
+        return fragment1;
+    }
+
+    public Fragment getFragment2() {
+        fragment2 = new Fragment2();
+        return fragment2;
+    }
+
+    public Fragment getFragment3() {
+        getFragmentManager().
+        fragment3 = new Fragment3();
+        return fragment3;
+    }
 }
