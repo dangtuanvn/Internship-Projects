@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
+import static com.hasbrain.howfastareyou.TapCountActivity.DEFAULT_SAVE_DATA;
+import static com.hasbrain.howfastareyou.TapCountActivity.DEFAULT_TIME_LIMIT;
+
 /**
  * Created by Jupiter (vu.cao.duy@gmail.com) on 10/14/15.
  */
@@ -71,9 +74,9 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-        switch_setting.setChecked(pref.getBoolean("save_data", true));
-        seekbar.setProgress(pref.getInt("time_limit", 10));
-        timeLimit  = pref.getInt("time_limit", 10);
+        switch_setting.setChecked(pref.getBoolean("save_data", DEFAULT_SAVE_DATA));
+        seekbar.setProgress(pref.getInt("time_limit", DEFAULT_TIME_LIMIT));
+        timeLimit  = pref.getInt("time_limit", DEFAULT_TIME_LIMIT);
         time.setText(timeLimit + " sec");
     }
 

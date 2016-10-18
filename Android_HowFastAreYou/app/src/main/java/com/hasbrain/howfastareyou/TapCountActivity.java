@@ -43,8 +43,8 @@ public class TapCountActivity extends AppCompatActivity {
     TextView count;
 
     private int tap_count = 0;
-    private static final int DEFAULT_TIME_LIMIT = 10;
-    private static final boolean DEFAULT_SAVE_DATA = true;
+    public static final int DEFAULT_TIME_LIMIT = 10;
+    public static final boolean DEFAULT_SAVE_DATA = true;
     private long startTime;
     private boolean start = false;
     private boolean change = false;
