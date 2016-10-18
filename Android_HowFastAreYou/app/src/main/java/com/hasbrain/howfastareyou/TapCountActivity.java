@@ -1,10 +1,16 @@
 package com.hasbrain.howfastareyou;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -16,6 +22,7 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -34,10 +41,14 @@ public class TapCountActivity extends AppCompatActivity {
     Chronometer tvTime;
     @Bind(R.id.count)
     TextView count;
+
     private int tap_count = 0;
+    private static final int DEFAULT_TIME_LIMIT = 10;
+    private static final boolean DEFAULT_SAVE_DATA = true;
     private long startTime;
     private boolean start = false;
     private boolean change = false;
+    private boolean saveData;
     private long timeAtPause = 0;
     TapCountResultFragment fragment;
 
@@ -54,7 +65,7 @@ public class TapCountActivity extends AppCompatActivity {
             start = savedInstanceState.getBoolean("last_start");
             tap_count = savedInstanceState.getInt("last_score");
             timeAtPause = savedInstanceState.getLong("last_timeAtPause");
-
+            saveData = savedInstanceState.getBoolean("save_data");
             if(this.start){
                 btStart.setText("RESUME");
             }
@@ -79,7 +90,6 @@ public class TapCountActivity extends AppCompatActivity {
 //                Log.i("startTime", "Start Time: " + startTime);
             }
         });
-
     }
 
     @Override
@@ -106,6 +116,7 @@ public class TapCountActivity extends AppCompatActivity {
     public void onTapBtnClicked(View v) {
         tap_count++;
         count.setText("" + tap_count);
+//        Log.i("READING INPUT FILE", read_file(this, filename));
     }
 
     private void startTapping() {
@@ -140,6 +151,8 @@ public class TapCountActivity extends AppCompatActivity {
         btStart.setEnabled(true);
         passDataToFragment();
         updateFragmentView();
+        fragment.saveDataToInternalStorage();
+        fragment.saveDataToExternalStorage();
     }
 
     private void passDataToFragment(){
@@ -179,7 +192,36 @@ public class TapCountActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        TIME_COUNT = pref.getInt("time_limit", 10) * 1000;
-        System.out.println("TIME COUNT: " + TIME_COUNT);
+        TIME_COUNT = pref.getInt("time_limit", DEFAULT_TIME_LIMIT) * 1000;
+        // System.out.println("TIME COUNT: " + TIME_COUNT);
+        saveData = pref.getBoolean("save_data", DEFAULT_SAVE_DATA);
+    }
+
+    public boolean isSaveData() {
+        return saveData;
+    }
+
+    @OnClick(R.id.bt_reset)
+    public void onResetBtnClicked(View v) {
+        resetRecords();
+    }
+
+    public void resetRecords(){
+        // get the path to sdcard
+        File sdcard = Environment.getExternalStorageDirectory();
+        // to this path add a new directory path
+        File dir = new File(sdcard.getAbsolutePath() + "/HowFastAreYou/");
+        // create this directory if not already created
+        dir.mkdir();
+        // create the file in which we will write the contents
+
+        File file_1 = new File(dir, "list_time.txt");
+
+        File file_2 = new File(dir, "list_score.txt");
+
+        file_1.delete();
+        file_2.delete();
+        fragment.clearData();
+        fragment.clearDatabase();
     }
 }

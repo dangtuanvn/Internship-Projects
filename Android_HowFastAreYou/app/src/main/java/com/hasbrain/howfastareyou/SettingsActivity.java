@@ -1,13 +1,24 @@
 package com.hasbrain.howfastareyou;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Jupiter (vu.cao.duy@gmail.com) on 10/14/15.
@@ -52,12 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
         switch_setting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    saveData = true;
-                }
-                else{
-                    saveData = false;
-                }
+                saveData = isChecked;
             }
         });
     }
@@ -67,8 +73,8 @@ public class SettingsActivity extends AppCompatActivity {
         super.onResume();
         switch_setting.setChecked(pref.getBoolean("save_data", true));
         seekbar.setProgress(pref.getInt("time_limit", 10));
-        time.setText(pref.getInt("time_limit", 10) + " sec");
         timeLimit  = pref.getInt("time_limit", 10);
+        time.setText(timeLimit + " sec");
     }
 
     @Override

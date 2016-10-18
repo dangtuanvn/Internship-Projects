@@ -18,18 +18,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public Fragment getFragment1() {
-        fragment1 = new Fragment1();
+        if(getFragmentManager().getBackStackEntryCount() < 1){
+            fragment1 = new Fragment1();
+            return fragment1;
+        }
         return fragment1;
     }
 
     public Fragment getFragment2() {
-        fragment2 = new Fragment2();
+        if(getFragmentManager().getBackStackEntryCount() < 1) {
+            fragment2 = new Fragment2();
+            return fragment2;
+        }
         return fragment2;
     }
 
     public Fragment getFragment3() {
-        getFragmentManager().
-        fragment3 = new Fragment3();
+        if(getFragmentManager().getBackStackEntryCount() < 1) {
+            fragment3 = new Fragment3();
+
+        }
         return fragment3;
+//        getFragmentManager().popBackStack()
     }
 }
+// add, replace, attach/detach, addToBackStack/popBackStack

@@ -36,16 +36,21 @@ public class Fragment1 extends Fragment {
                     fragmentTransaction.commit();
                 }
                 else {
+
                     fragment =  ((MainActivity) getActivity()).getFragment3();
-                        fragmentTransaction.replace(container.getId(), fragment, "fragment_3");
-                        fragmentTransaction.addToBackStack("f1");
-                        fragmentTransaction.commit();
+//                        fragmentTransaction.replace(container.getId(), fragment, "fragment_3");
+                    fragmentTransaction.add(container.getId(), fragment, "fragment_3");
+                     fragmentTransaction.addToBackStack("f1");
+                    fragmentTransaction.remove(getActivity().getFragmentManager().findFragmentById(R.id.space_2));
+                    fragmentTransaction.commit();
                     for(int entry = 0; entry < fragmentManager.getBackStackEntryCount(); entry++){
                         Log.i("BACKSTACK", "Found fragment: " + fragmentManager.getBackStackEntryAt(entry).getId());
                     }
                     if(   fragmentManager.getBackStackEntryCount() < 1){
                         Log.i("BACKSTACK", "Found fragment: " + fragmentManager.getBackStackEntryCount() + " NONE");
                     }
+
+                    System.out.println(fragmentManager.findFragmentById(R.id.space_1));
                 }
 
             }
@@ -56,4 +61,6 @@ public class Fragment1 extends Fragment {
 
         return view;
     }
+
+
 }
