@@ -247,7 +247,7 @@ public class TapCountResultFragment extends Fragment {
     public void clearDatabase(){
         final Cursor cursor = dbHelper.getAllScores();
         for(int j = 0; j < cursor.getCount(); j++){
-            cursor.moveToPosition(j);
+
             dbHelper.deleteScore(cursor.getInt(cursor.getColumnIndex(columns[2])));
         }
     }

@@ -25,7 +25,7 @@ public class SignUpStep2Fragment extends Fragment {
     SignUpData data;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_sign_up_step2, container, false);
 
         SeekBar salaryBar = (SeekBar) view.findViewById(R.id.salaryBar);
@@ -115,10 +115,11 @@ public class SignUpStep2Fragment extends Fragment {
 //            startActivity(intentNew);
 
             data.setSalary(salary);
-            data.setSalary(salary);
             data.setSports(sports);
             sendDataStep2(data);
         }
+
+
     }
 
     public void saveData(SignUpData data){

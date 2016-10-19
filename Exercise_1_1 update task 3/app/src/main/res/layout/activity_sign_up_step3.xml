@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.dangtuanvn.exercise_1_1.SignUpStep3Activity">
+
+    <FrameLayout
+        android:id="@+id/sectionThankText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginTop="100dp">
+
+        <TextView
+            android:text="Thank you \nfor filling information. What do you want to do next?"
+            android:textSize="23dp"
+            android:textColor="#808080"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+    <TableLayout
+        android:divider="#000000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sectionThankText"
+        android:layout_centerHorizontal="true">
+        <Button
+            android:text="SEND EMAIL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:background="@drawable/rounded_button"
+            android:textColor="#FFFFFF"
+            android:id="@+id/buttonSend" />
+
+        <Button
+            android:text="RESTART"
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:textColor="#FFFFFF"
+            android:id="@+id/buttonRestart"
+            android:background="@drawable/rounded_button"/>
+    </TableLayout>
+
+</RelativeLayout>

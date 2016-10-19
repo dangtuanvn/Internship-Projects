@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import java.io.File;
-
 /**
  * Created by dangtuanvn on 10/11/16.
  */
@@ -66,9 +64,9 @@ public class SignUpStep3Fragment extends Fragment {
 //        intentNew.putExtra(Intent.EXTRA_TEXT,
 //                firstName + "_" + lastName + "\n" + phone + "\n" + salary + " dollars");
 
-        intentNew.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(data.getPhotoPath())));
         intentNew.setData(uri);
         startActivity(Intent.createChooser(intentNew, "Send email"));
+
     }
 
     public void restart(){

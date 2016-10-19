@@ -5,17 +5,17 @@ package com.example.dangtuanvn.exercise_1_1;
  */
 
 public class SignUpData {
-    private String firstName, lastName, email, phone, gender, photoPath;
+    private String firstName, lastName, email, phone, gender;
     private int salary;
     private boolean[] sports = new boolean[6];
 
-    public SignUpData(String firstName, String lastName, String email, String phone, String gender, String imagePath) {
+    public SignUpData(String firstName, String lastName, String email, String phone, String gender) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
+
         this.gender = gender;
-        this.photoPath = imagePath;
     }
 
     public String getFirstName() {
@@ -41,8 +41,6 @@ public class SignUpData {
     public int getSalary() {
         return salary;
     }
-
-    public String getPhotoPath() { return photoPath; }
 
     public void setSalary(int salary) {
         this.salary = salary;

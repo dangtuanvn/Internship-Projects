@@ -27,21 +27,18 @@ public class UserSignUpFragmentActivity extends AppCompatActivity implements Sig
     @Override
     public void sendDataStep1(SignUpData data) {
         fragmentOne = (SignUpStep1Fragment) getFragmentManager().findFragmentById(R.id.signup_fragment);
+
         SignUpStep2Fragment fragmentTwo = new SignUpStep2Fragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.signup_fragment, fragmentTwo);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        getFragmentManager().beginTransaction().add(R.id.signup_fragment, fragmentTwo).commit();
+
         fragmentTwo.saveData(data);
     }
 
     @Override
     public void sendDataStep2(SignUpData data) {
         SignUpStep3Fragment fragmentThree = new SignUpStep3Fragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.signup_fragment, fragmentThree);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        getFragmentManager().beginTransaction().add(R.id.signup_fragment, fragmentThree).commit();
+
         fragmentThree.saveData(data);
     }
 
