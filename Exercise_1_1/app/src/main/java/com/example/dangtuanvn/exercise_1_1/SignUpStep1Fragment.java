@@ -56,8 +56,8 @@ public class SignUpStep1Fragment extends Fragment {
         });
         profilePicture = (ImageView) view.findViewById(R.id.inputImage);
         if (photoPath != null) {
-            Bitmap bitmap = recreateAvatar();
-
+            Bitmap bitmap = createAvatar();
+            bitmap = rotateBitmap90(bitmap);
             profilePicture.invalidate();
             profilePicture.setImageBitmap(bitmap);
             updateAvatar = true;
@@ -271,31 +271,26 @@ public class SignUpStep1Fragment extends Fragment {
 //                      targetW = profilePicture.getDrawable().getIntrinsicWidth();
 //                      targetH = profilePicture.getDrawable().getIntrinsicHeight();
 
-                        Toast.makeText(getActivity(), photoPath, Toast.LENGTH_LONG).show();
-                        Toast.makeText(getActivity(), "Width: " + targetW + " --- Height: " + targetH, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getActivity(), photoPath, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getActivity(), "Width: " + targetW + " --- Height: " + targetH, Toast.LENGTH_LONG).show();
 
                         // Get the dimensions of the bitmap
-                        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-                        bmOptions.inJustDecodeBounds = true;
-                        BitmapFactory.decodeFile(photoPath, bmOptions);
-                        int photoW = bmOptions.outWidth;
-                        int photoH = bmOptions.outHeight;
+//                        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+//                        bmOptions.inJustDecodeBounds = true;
+//                        BitmapFactory.decodeFile(photoPath, bmOptions);
+//                        int photoW = bmOptions.outWidth;
+//                        int photoH = bmOptions.outHeight;
+//
+//                        // Determine how much to scale down the image
+//                        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+//
+//                        // Decode the image file into a Bitmap sized to fill the View
+//                        bmOptions.inJustDecodeBounds = false;
+//                        bmOptions.inSampleSize = scaleFactor;
+//                        bmOptions.inPurgeable = true;
 
-                        // Determine how much to scale down the image
-                        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-                        // Decode the image file into a Bitmap sized to fill the View
-                        bmOptions.inJustDecodeBounds = false;
-                        bmOptions.inSampleSize = scaleFactor;
-                        bmOptions.inPurgeable = true;
-
-                        Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
-                        Matrix matrix = new Matrix();
-                        matrix.postRotate(90);
-
-//                        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                            bitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-//                        }
+                        Bitmap bitmap = createAvatar();
+                        bitmap = rotateBitmap90(bitmap);
 
                         // Setting image image icon on the imageview
                         profilePicture.invalidate();
@@ -309,41 +304,24 @@ public class SignUpStep1Fragment extends Fragment {
                             // Rescale the image if it is larger than 400 pixels
                             boolean rescale = false;
                             if(targetH > 400){
-                                Log.i("BEFORE", "W: " + targetW + " H: " + targetH);
+                                //Log.i("BEFORE", "W: " + targetW + " H: " + targetH);
                                 Double newW = targetW /((double) targetH / 400);
                                 targetW = newW.intValue();
                                 targetH = 400;
-                                Log.i("RESIZE", "W: " + targetW + " H: " + targetH);
+                                //Log.i("RESIZE", "W: " + targetW + " H: " + targetH);
                                 rescale = true;
                             } else if(targetW > 400){
-                                Log.i("BEFORE", "W: " + targetW + " H: " + targetH);
+                                //Log.i("BEFORE", "W: " + targetW + " H: " + targetH);
                                 Double newH = targetH / ((double) targetW / 400);
                                 targetH = newH.intValue();
                                 targetW = 400;
-                                Log.i("RESIZE", "W: " + targetW + " H: " + targetH);
+                                //Log.i("RESIZE", "W: " + targetW + " H: " + targetH);
                                 rescale = true;
                             }
 
                             if(rescale){
-                                Toast.makeText(getActivity(), "Width: " + targetW + " --- Height: " + targetH, Toast.LENGTH_LONG).show();
-                                bmOptions = new BitmapFactory.Options();
-                                bmOptions.inJustDecodeBounds = true;
-                                BitmapFactory.decodeFile(photoPath, bmOptions);
-                                photoW = bmOptions.outWidth;
-                                photoH = bmOptions.outHeight;
-
-                                // Determine how much to scale down the image
-                                scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-                                // Decode the image file into a Bitmap sized to fill the View
-                                bmOptions.inJustDecodeBounds = false;
-                                bmOptions.inSampleSize = scaleFactor;
-                                bmOptions.inPurgeable = true;
-
-                                bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
-                                matrix = new Matrix();
-                                matrix.postRotate(90);
-                                bitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                                // Toast.makeText(getActivity(), "Width: " + targetW + " --- Height: " + targetH, Toast.LENGTH_LONG).show();
+                                bitmap = createAvatar();
                             }
 
                             // Save the new bitmap to file
@@ -366,7 +344,7 @@ public class SignUpStep1Fragment extends Fragment {
         }
     }
 
-    public Bitmap recreateAvatar(){
+    public Bitmap createAvatar(){
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(photoPath, bmOptions);
@@ -384,6 +362,15 @@ public class SignUpStep1Fragment extends Fragment {
 
         Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
         return bitmap;
+    }
+
+    public Bitmap rotateBitmap90(Bitmap bitmap){
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+
+//                        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        return bitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+//                        }
     }
 
 //    @Override
