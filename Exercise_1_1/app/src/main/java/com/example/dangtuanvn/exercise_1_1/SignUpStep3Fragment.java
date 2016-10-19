@@ -90,6 +90,8 @@ public class SignUpStep3Fragment extends Fragment {
 //        int salary = data.getSalary();
 //        boolean[] sports = data.getSports();
 
+        SignUpStep1Fragment fragmentOne = (SignUpStep1Fragment) getActivity().getFragmentManager().findFragmentByTag("fragment_one");
+        fragmentOne.resetPhotoPath();
         Intent intentNew = new Intent(getActivity(), UserSignUpFragmentActivity.class);
         intentNew.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intentNew);

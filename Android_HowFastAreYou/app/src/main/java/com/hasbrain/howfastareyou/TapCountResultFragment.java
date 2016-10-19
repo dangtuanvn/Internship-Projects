@@ -42,9 +42,9 @@ public class TapCountResultFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_results, container, false);
         if(first_start){
             first_start = false;
-            loadDatabase();
+            // loadDatabase();
             // readDataFromExternalStorage();
-            // readDataFromInternalStorage();
+            readDataFromInternalStorage();
         }
 
         else {
@@ -96,35 +96,65 @@ public class TapCountResultFragment extends Fragment {
 
 
     public void saveDataToInternalStorage(){
-        FileOutputStream fos_1, fos_2;
+//        FileOutputStream fos_1, fos_2;
+//        try {
+//            fos_1 = getActivity().openFileOutput("list_time", Context.MODE_PRIVATE);
+//            ObjectOutputStream oos = new ObjectOutputStream(fos_1);
+//            oos.writeObject(listTime);
+//            oos.close();
+//
+//            fos_2 = getActivity().openFileOutput("list_score", Context.MODE_PRIVATE);
+//            oos = new ObjectOutputStream(fos_2);
+//            oos.writeObject(listScore);
+//            oos.close();
+//            // ArrayList<Object> returnlist = (ArrayList<Object>) ois.readObject();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        FileOutputStream fos;
         try {
-            fos_1 = getActivity().openFileOutput("list_time", Context.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos_1);
-            oos.writeObject(listTime);
-            oos.close();
+            fos = getActivity().openFileOutput("list_record", Context.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-            fos_2 = getActivity().openFileOutput("list_score", Context.MODE_PRIVATE);
-            oos = new ObjectOutputStream(fos_2);
-            oos.writeObject(listScore);
-            oos.close();
-            // ArrayList<Object> returnlist = (ArrayList<Object>) ois.readObject();
+            Object[] lists = new Object[2];
+            lists[0] = listTime;
+            lists[1] = listScore;
 
-        } catch (Exception e) {
+            oos.writeObject(lists);
+            oos.close();
+        }
+     catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void readDataFromInternalStorage(){
-        FileInputStream fis_1, fis_2;
+//        FileInputStream fis_1, fis_2;
+//        try {
+//            fis_1 = getActivity().openFileInput("list_time");
+//            ObjectInputStream ois = new ObjectInputStream(fis_1);
+//            listTime = (ArrayList<String>) ois.readObject();
+//            ois.close();
+//
+//            fis_2 = getActivity().openFileInput("list_score");
+//            ois = new ObjectInputStream(fis_2);
+//            listScore = (ArrayList<Integer>) ois.readObject();
+//            ois.close();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            listTime = new ArrayList<>();
+//            listScore = new ArrayList<>();
+//        }
+        FileInputStream fis;
         try {
-            fis_1 = getActivity().openFileInput("list_time");
-            ObjectInputStream ois = new ObjectInputStream(fis_1);
-            listTime = (ArrayList<String>) ois.readObject();
-            ois.close();
-
-            fis_2 = getActivity().openFileInput("list_score");
-            ois = new ObjectInputStream(fis_2);
-            listScore = (ArrayList<Integer>) ois.readObject();
+            fis = getActivity().openFileInput("list_record");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            Object[] list = (Object[]) ois.readObject();
+            listTime = (ArrayList<String>) list[0];
+            listScore = (ArrayList<Integer>) list[0];
             ois.close();
 
         } catch (Exception e) {
@@ -233,8 +263,6 @@ public class TapCountResultFragment extends Fragment {
 
         final Cursor cursor = dbHelper.getAllScores();
 
-
-
         for(int j = 0; j < cursor.getCount(); j++){
             Log.i("COUNT", cursor.getCount() + "");
             cursor.moveToPosition(j);
@@ -242,6 +270,8 @@ public class TapCountResultFragment extends Fragment {
             listTime.add(cursor.getString(cursor.getColumnIndex(columns[0])));
             listScore.add(cursor.getInt(cursor.getColumnIndex(columns[1])));
         }
+        cursor.close();
+
     }
 
     public void clearDatabase(){

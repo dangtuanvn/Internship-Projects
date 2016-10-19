@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBScore extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "ScoreDatabase.db";
     private static final int DATABASE_VERSION = 1;
-    public static final String TABLE_NAME = "records";
+    public static final String TABLE_NAME = "RECORDS";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TIME = "time";
     public static final String COLUMN_SCORE = "score";

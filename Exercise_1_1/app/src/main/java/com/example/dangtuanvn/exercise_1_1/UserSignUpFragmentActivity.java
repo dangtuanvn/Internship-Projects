@@ -21,7 +21,7 @@ public class UserSignUpFragmentActivity extends AppCompatActivity implements Sig
         setContentView(R.layout.activity_sign_up);
 
         SignUpStep1Fragment fragmentOne = new SignUpStep1Fragment();
-        getFragmentManager().beginTransaction().add(R.id.signup_fragment, fragmentOne).commit();
+        getFragmentManager().beginTransaction().add(R.id.signup_fragment, fragmentOne, "fragment_one").commit();
     }
 
     @Override
