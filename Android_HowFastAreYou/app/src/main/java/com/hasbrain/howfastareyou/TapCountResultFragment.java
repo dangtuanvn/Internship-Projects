@@ -36,15 +36,16 @@ public class TapCountResultFragment extends Fragment {
     public static ResultAdapter adapter;
     RecyclerView recycleListView;
     boolean first_start = true;
+    private DBScore dbHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_results, container, false);
         if(first_start){
             first_start = false;
-            // loadDatabase();
+            loadDatabase();
             // readDataFromExternalStorage();
-            readDataFromInternalStorage();
+            // readDataFromInternalStorage();
         }
 
         else {
@@ -77,6 +78,8 @@ public class TapCountResultFragment extends Fragment {
     public void saveData(){
         listTime.add(this.getArguments().getString("time"));
         listScore.add(this.getArguments().getInt("score"));
+
+        // Write data to database
         dbHelper.insertScore(this.getArguments().getString("time"), this.getArguments().getInt("score"));
     }
 
@@ -170,7 +173,9 @@ public class TapCountResultFragment extends Fragment {
         // to this path add a new directory path
         File dir = new File(sdcard.getAbsolutePath() + "/HowFastAreYou/");
         // create this directory if not already created
-        dir.mkdir();
+        if(!dir.exists()) {
+            dir.mkdir();
+        }
         // create the file in which we will write the contents
 
         try {
@@ -249,36 +254,42 @@ public class TapCountResultFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    DBScore dbHelper;
     String [] columns = new String[] {
             dbHelper.COLUMN_TIME,
             dbHelper.COLUMN_SCORE,
             dbHelper.COLUMN_ID
     };
+
     public void loadDatabase(){
         listTime = new ArrayList<>();
         listScore = new ArrayList<>();
 
         dbHelper = new DBScore(getActivity());
 
-        final Cursor cursor = dbHelper.getAllScores();
+        Cursor cursor = null;
 
-        for(int j = 0; j < cursor.getCount(); j++){
-            Log.i("COUNT", cursor.getCount() + "");
-            cursor.moveToPosition(j);
-            Log.i("COLUMN COUNT", cursor.getColumnCount()+ "");
-            listTime.add(cursor.getString(cursor.getColumnIndex(columns[0])));
-            listScore.add(cursor.getInt(cursor.getColumnIndex(columns[1])));
+        try {
+            cursor = dbHelper.getAllScores();
+            for (int j = 0; j < cursor.getCount(); j++) {
+                Log.i("COUNT", cursor.getCount() + "");
+                cursor.moveToPosition(j);
+                Log.i("COLUMN COUNT", cursor.getColumnCount() + "");
+                listTime.add(cursor.getString(cursor.getColumnIndex(columns[0])));
+                listScore.add(cursor.getInt(cursor.getColumnIndex(columns[1])));
+            }
         }
-        cursor.close();
-
+        finally {
+            if(cursor != null){
+                cursor.close();
+            }
+        }
     }
 
     public void clearDatabase(){
-        final Cursor cursor = dbHelper.getAllScores();
-        for(int j = 0; j < cursor.getCount(); j++){
-
-            dbHelper.deleteScore(cursor.getInt(cursor.getColumnIndex(columns[2])));
-        }
+//        final Cursor cursor = dbHelper.getAllScores();
+//        for(int j = 0; j < cursor.getCount(); j++){
+//            dbHelper.deleteScore(cursor.getInt(cursor.getColumnIndex(columns[2])));
+//        }
+        dbHelper.clearDatabase();
     }
 }

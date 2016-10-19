@@ -64,4 +64,9 @@ public class DBScore extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME, COLUMN_ID + " = ? ", new String[] { Integer.toString(id) });
     }
+
+    public void clearDatabase(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NAME);
+    }
 }
