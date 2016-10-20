@@ -374,14 +374,11 @@ public class SignUpStep1Fragment extends Fragment {
         return bitmap;
     }
 
-    public Bitmap rotateBitmap90(Bitmap bitmap){
-        Matrix matrix = new Matrix();
-        matrix.postRotate(90);
-
-//                        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-        return bitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-//                        }
-    }
+//    public Bitmap rotateBitmap90(Bitmap bitmap){
+//        Matrix matrix = new Matrix();
+//        matrix.postRotate(90);
+//        return bitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+//    }
 
     // http://stackoverflow.com/questions/20478765/how-to-get-the-correct-orientation-of-the-image-selected-from-the-default-image
     public static Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
