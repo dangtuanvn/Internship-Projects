@@ -16,12 +16,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.LruCache;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.List;
 
 public class CarListActivity extends AppCompatActivity {
+    protected static LruCache<String, Bitmap> memoryCache;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +39,23 @@ public class CarListActivity extends AppCompatActivity {
 
             }
         });
+
+        // Get max available VM memory, exceeding this amount will throw an
+        // OutOfMemory exception. Stored in kilobytes as LruCache takes an
+        // int in its constructor.
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+        // Use 1/8th of the available memory for this memory cache.
+        final int cacheSize = maxMemory / 8;
+
+        memoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                // The cache size will be measured in kilobytes rather than
+                // number of items.
+                return bitmap.getByteCount() / 1024;
+            }
+        };
     }
 
     public void displayCarList(List<Car> carList){
@@ -44,5 +64,15 @@ public class CarListActivity extends AppCompatActivity {
         CarAdapter adapter = new CarAdapter(this, carList);
         recycleListView.setAdapter(adapter);
         recycleListView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public static void addBitmapToMemoryCache(String position, Bitmap bitmap) {
+        if (getBitmapFromMemCache(position) == null) {
+            memoryCache.put(position, bitmap);
+        }
+    }
+
+    public static Bitmap getBitmapFromMemCache(String key) {
+        return memoryCache.get(key);
     }
 }

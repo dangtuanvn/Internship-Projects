@@ -12,15 +12,17 @@ import android.widget.ImageView;
 
 import java.lang.ref.WeakReference;
 
+import static com.hasbrain.chooseyourcar.CarListActivity.addBitmapToMemoryCache;
+
 /**
  * Created by dangtuanvn on 10/20/16.
  */
 
 public class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
     private final WeakReference<ImageView> imageViewReference;
-    private int data = 0;
     private Context context;
-    private String uri;
+    private String uri = null;
+    private int data = 0;
 
     public BitmapWorkerTask(Context context, ImageView imageView, String uri) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
@@ -32,10 +34,12 @@ public class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
     // Decode image in background.
     @Override
     protected Bitmap doInBackground(Integer... params) {
-
+        data = params[0];
         Uri _uri = Uri.parse(uri);
-        return decodeSampledBitmapFromResource(context.getResources(),
+        final Bitmap bitmap = decodeSampledBitmapFromResource(context.getResources(),
                 getResourceId(_uri.getLastPathSegment(), _uri.getPathSegments().get(0), context.getPackageName()), 70, 70);
+        addBitmapToMemoryCache(String.valueOf(params[0]), bitmap);
+        return bitmap;
     }
 
     @Override
@@ -46,15 +50,14 @@ public class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
 
         if (imageViewReference != null && bitmap != null) {
             final ImageView imageView = imageViewReference.get();
-            final BitmapWorkerTask bitmapWorkerTask =
-                    getBitmapWorkerTask(imageView);
+            final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
             if (this == bitmapWorkerTask && imageView != null) {
                 imageView.setImageBitmap(bitmap);
             }
         }
     }
 
-    protected static int calculateInSampleSize(
+    private int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
@@ -77,7 +80,7 @@ public class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
         return inSampleSize;
     }
 
-    protected static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
+    private Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -93,7 +96,7 @@ public class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
     }
 
     // http://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
-    public int getResourceId(String pVariableName, String pResourcename, String pPackageName) {
+    private int getResourceId(String pVariableName, String pResourcename, String pPackageName) {
         try {
             return context.getResources().getIdentifier(pVariableName, pResourcename, pPackageName);
         } catch (Exception e) {
@@ -116,13 +119,13 @@ public class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
         }
     }
 
-    public static boolean cancelPotentialWork(int data, ImageView imageView) {
+    public static boolean cancelPotentialWork(int position, ImageView imageView) {
         final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
 
         if (bitmapWorkerTask != null) {
             final int bitmapData = bitmapWorkerTask.data;
             // If bitmapData is not yet set or it differs from the new data
-            if (bitmapData == 0 || bitmapData != data) {
+            if (bitmapData == 0 || bitmapData != position) {
                 // Cancel previous task
                 bitmapWorkerTask.cancel(true);
             } else {
@@ -145,5 +148,7 @@ public class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
         return null;
     }
 
-
+    public String getUri() {
+        return uri;
+    }
 }
