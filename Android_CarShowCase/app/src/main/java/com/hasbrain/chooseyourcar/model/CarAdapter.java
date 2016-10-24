@@ -1,7 +1,10 @@
 package com.hasbrain.chooseyourcar.model;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +13,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hasbrain.chooseyourcar.CarDetailActivity;
 import com.hasbrain.chooseyourcar.R;
+import com.hasbrain.chooseyourcar.datastore.CarListPassData;
 import com.hasbrain.chooseyourcar.loader.BitmapWorkerTask;
 import com.hasbrain.chooseyourcar.loader.ImageLoader;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.hasbrain.chooseyourcar.CarListActivity.getBitmapFromMemCache;
@@ -53,14 +62,11 @@ public class CarAdapter extends RecyclerView.Adapter implements ImageLoader{
 
     @Override
     public void displayImage(String uri, ImageView imageView, int position) {
-//        BitmapWorkerTask task = new BitmapWorkerTask(context, imageView, uri);
-//        task.execute(1);
-        loadBitmap(imageView, uri, position);
 
-//        Uri _uri = Uri.parse(uri);
-//        imageView.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(),
-//        getResourceId(_uri.getLastPathSegment(), _uri.getPathSegments().get(0), context.getPackageName()), 70, 70));
+        // loadBitmap(imageView, uri, position);
+        displayCarList_Picasso(imageView, uri);
     }
+
 
 
     public void loadBitmap(ImageView imageView, String uri, int position) {
@@ -95,6 +101,17 @@ public class CarAdapter extends RecyclerView.Adapter implements ImageLoader{
             car_name = (TextView) itemView.findViewById(R.id.name_car);
 //            car_image.setMaxHeight(70);
 //            car_image.setMaxWidth(70);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, CarDetailActivity.class);
+//                    CarListPassData data = new CarListPassData(carList);
+//                    intent.putExtra("car_list", data);
+                    intent.putExtra("position", getAdapterPosition());
+                    context.startActivity(intent);
+                }
+            });
         }
 
         public void bind(Car car_item, int position){
@@ -104,4 +121,11 @@ public class CarAdapter extends RecyclerView.Adapter implements ImageLoader{
         }
     }
 
+    public void displayCarList_Picasso(ImageView imageView, String uri){
+        Uri _uri = Uri.parse(uri);
+        Picasso.with(context)
+                .load(_uri)
+                .resize(500, 400)
+                .into(imageView);
+    }
 }

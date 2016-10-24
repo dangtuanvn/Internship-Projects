@@ -8,6 +8,17 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.hasbrain.chooseyourcar.datastore.AssetBasedCarDatastoreImpl;
+import com.hasbrain.chooseyourcar.datastore.CarDatastore;
+import com.hasbrain.chooseyourcar.datastore.CarListPassData;
+import com.hasbrain.chooseyourcar.datastore.OnCarReceivedListener;
+import com.hasbrain.chooseyourcar.model.Car;
+
+import java.util.List;
 
 /**
  * Created by Jupiter (vu.cao.duy@gmail.com) on 10/19/15.
@@ -28,16 +39,28 @@ public class CarDetailActivity extends FragmentActivity {
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private PagerAdapter mPagerAdapter;
-
+    private int position;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_detail);
 
+//        CarListPassData data = getIntent().getParcelableExtra("car_list");
+//        this.carList = data.getCarList();
+        Gson gson = new GsonBuilder().create();
+        CarDatastore carDatastore = new AssetBasedCarDatastoreImpl(this, "car_data.json", gson);
+        carDatastore.getCarList(new OnCarReceivedListener() {
+            @Override
+            public void onCarReceived(List<Car> cars, Exception ex) {
+                mPager = (ViewPager) findViewById(R.id.pager);
+                mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), cars);
+                mPager.setAdapter(mPagerAdapter);
+                position = getIntent().getExtras().getInt("position");
+                mPager.setCurrentItem(position, true);
+            }
+        });
         // Instantiate a ViewPager and a PagerAdapter.
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
+
     }
 
     @Override
@@ -57,18 +80,39 @@ public class CarDetailActivity extends FragmentActivity {
      * sequence.
      */
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
+        List<Car> carList;
+
+        public ScreenSlidePagerAdapter(FragmentManager fm, List<Car> carList) {
             super(fm);
+            this.carList = carList;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return new ScreenSlidePageFragment();
+            carList.get(position).getImageUrl();
+
+            ScreenSlidePageFragment fragment = new ScreenSlidePageFragment();
+            Bundle fragmentData = new Bundle();
+            fragmentData.putString("uri", carList.get(position).getImageUrl());
+            fragmentData.putString("car_name", carList.get(position).getName());
+            fragmentData.putString("car_brand", carList.get(position).getBrand());
+            fragment.setArguments(fragmentData);
+            return fragment;
         }
 
         @Override
         public int getCount() {
-            return NUM_PAGES;
+            return carList.size();
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK && mPager.getCurrentItem() == 0)) {
+            return super.onKeyDown(keyCode, event);
+        } else {
+            mPager.setCurrentItem(0, true);
+            return super.onKeyDown(keyCode, event);
         }
     }
 }

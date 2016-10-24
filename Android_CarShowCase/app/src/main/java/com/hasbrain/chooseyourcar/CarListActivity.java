@@ -34,8 +34,7 @@ public class CarListActivity extends AppCompatActivity {
         carDatastore.getCarList(new OnCarReceivedListener() {
             @Override
             public void onCarReceived(List<Car> cars, Exception ex) {
-                displayCarList(cars);
-
+               displayCarList(cars);
 
             }
         });
@@ -75,4 +74,5 @@ public class CarListActivity extends AppCompatActivity {
     public static Bitmap getBitmapFromMemCache(String key) {
         return memoryCache.get(key);
     }
+
 }

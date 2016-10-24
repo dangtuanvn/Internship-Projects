@@ -1,13 +1,45 @@
 <!-- fragment_screen_slide_page.xml -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content"
+<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
+    <ScrollView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-    <ImageView
-        android:id="@+id/image_car"
+        <ImageView
+            android:id="@+id/image_car"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </ScrollView>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:background="#80616161"
+        android:layout_gravity="bottom"
+        android:padding="10dp"
+        >
+        <TextView
+            android:id="@+id/detail_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="535i"
+            android:textColor="@android:color/white"
+            android:textSize="35dp"
+            android:layout_marginRight="10dp"/>
 
-</ScrollView>
+        <TextView
+            android:id="@+id/detail_brand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="BMW"
+            android:layout_below="@+id/detail_name"
+            android:textColor="@android:color/white"
+            android:textSize="22dp"
+            android:layout_marginRight="10dp"/>
+    </RelativeLayout>
+</FrameLayout>

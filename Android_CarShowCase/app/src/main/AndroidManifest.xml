@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CarDetailActivity">
+        <activity android:name=".CarDetailActivity"
+            android:screenOrientation="landscape">
 
         </activity>
     </application>
