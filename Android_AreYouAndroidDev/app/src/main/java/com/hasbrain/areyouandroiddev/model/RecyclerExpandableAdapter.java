@@ -170,24 +170,24 @@ public class RecyclerExpandableAdapter extends ExpandableRecyclerAdapter<Recycle
             num_comments.setText(Integer.toString(post.getCommentCount()) + " Comments · ");
             domain.setText(post.getDomain() + " · ");
 
-            Calendar c = Calendar.getInstance();
-            System.out.println("Current time => " + c.getTime());
-            java.util.Date d = c.getTime();
-
-            java.util.Date time = new java.util.Date(post.getCreatedUTC());
-            DateFormat dateFormat = getDateInstance();
-            String now = dateFormat.format(c.getTime());
-            String day = dateFormat.format(time);
-
-
-            long diff = d.getTime() - time.getTime();
-
-            long diffSeconds = diff / 1000 % 60;
-            long diffMinutes = diff / (60 * 1000) % 60;
-            long diffHours = diff / (60 * 60 * 1000) % 24;
-            long diffDays = diff / (24 * 60 * 60 * 1000);
-
-            date.setText(Long.toString(diffDays) + " days ago");
+//            Calendar c = Calendar.getInstance();
+//            System.out.println("Current time => " + c.getTime());
+//            java.util.Date d = c.getTime();
+//
+//            java.util.Date time = new java.util.Date(post.getCreatedUTC());
+//            DateFormat dateFormat = getDateInstance();
+//            String now = dateFormat.format(c.getTime());
+//            String day = dateFormat.format(time);
+//
+//
+//            long diff = d.getTime() - time.getTime();
+//
+//            long diffSeconds = diff / 1000 % 60;
+//            long diffMinutes = diff / (60 * 1000) % 60;
+//            long diffHours = diff / (60 * 60 * 1000) % 24;
+//            long diffDays = diff / (24 * 60 * 60 * 1000);
+//
+//            date.setText(Long.toString(diffDays) + " days ago");
             itemView.setTag(post);
 
         }

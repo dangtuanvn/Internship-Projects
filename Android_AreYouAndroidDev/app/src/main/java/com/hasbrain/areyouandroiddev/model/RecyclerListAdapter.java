@@ -17,6 +17,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_FOOTER = 2;
+    private static final int TYPE_LOADING = 3;
     private List<RedditPost> postList;
     private Context mContext;
 
@@ -36,6 +37,11 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(viewType == TYPE_FOOTER) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.footer, parent, false);
             return new FooterViewHolder(v);
+        }
+
+        if(viewType == TYPE_LOADING){
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.loading, parent, false);
+            return new LoadingViewHolder(v);
         }
 
         else if(viewType == TYPE_ITEM) {
@@ -58,6 +64,10 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     mContext.startActivity(intent);
                 }
             });
+        }
+
+        if(viewHolder instanceof RecyclerListAdapter.LoadingViewHolder) {
+
         }
 
         else if(viewHolder instanceof RecyclerListAdapter.ViewHolder) {
@@ -117,7 +127,10 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return postList.size() + 1;
+        if(!loading){
+            return postList.size() + 1;
+        }
+        return postList.size() + 2;
     }
 
     @Override
@@ -125,15 +138,35 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(isPositionFooter (position)) {
             return TYPE_FOOTER;
         }
+        else if(isPositionLoading(position)){
+            return TYPE_LOADING;
+        }
         return TYPE_ITEM;
     }
 
     private boolean isPositionFooter(int position) {
+        if(!loading){
+            return position == postList.size();
+        }
+        return position == postList.size() + 1;
+    }
+
+    private boolean isPositionLoading(int position) {
+        if(!loading){
+            return false;
+        }
         return position == postList.size();
     }
 
     class FooterViewHolder extends RecyclerView.ViewHolder {
         public FooterViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    private boolean loading = true;
+    class LoadingViewHolder extends RecyclerView.ViewHolder {
+        public LoadingViewHolder(View itemView) {
             super(itemView);
         }
     }
